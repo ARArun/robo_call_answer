@@ -44,11 +44,7 @@ function act()
     if math.abs(imp_msg.horizontal_bearing - robot.positioning.orientation.angle) < 0.1 then
         x = dist()
         log(x)
-        if x == 0 then
-            robot.wheels.set_velocity(10,10)
-        elseif x == 1 then
-            robot.wheels.set_velocity(0,0)
-        end
+        robot.wheels.set_velocity((1 - x) * 10,(1 - x) * 10)
     end
 end
 
@@ -56,8 +52,8 @@ end
 function dist()
     x = 0
     for i = 1,24 do
-        if robot.proximity[i].value == 1 then
-            x = 1
+        if robot.proximity[i].value >= x then
+            x = robot.proximity[i].value
         end
     end
     return x
